@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+
+require 'mongo'
+
+db = Mongo::Client.new(
+  [ENV.fetch('MONGODB_HOST_NAME')],
+  database: ENV.fetch('MONGODB_NAME'),
+  auth_source: 'admin',
+  password: ENV.fetch('MONGODB_ADMINPASSWORD'),
+  user: ENV.fetch('MONGODB_ADMINUSERNAME')
+)
+
+# get sample_collections
+collection = db[:sample_collections]
+
+# insert a document
+document = { name: 'test name', message: 'hello' }
+collection.insert_one(document)
+
+# print all documents in collection
+result = collection.find
+result.each do |doc|
+  puts doc
+end
